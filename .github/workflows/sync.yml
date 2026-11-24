@@ -1,0 +1,17 @@
+name: Sync Upstream
+on:
+  schedule:
+    - cron: '0 0 * * *' # 每天 UTC 0 点执行一次
+  workflow_dispatch: # 保留手动触发按钮
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    # 仅在 Fork 仓库中运行，避免在原仓库误触发
+    if: github.event.repository.fork == true
+    steps:
+      - uses: wei/git-sync@v3
+        with:
+          source_repo: 'https://github.com/KJGX66F/usque-custom-pro.git'
+          source_branch: 'main' # 或原仓库的默认分支名
+          destination_branch: 'main' # 你 Fork 仓库的对应分支
+          github_token: ${{ secrets.GITHUB_TOKEN }}
